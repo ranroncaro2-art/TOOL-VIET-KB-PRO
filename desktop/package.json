@@ -1,0 +1,71 @@
+{
+  "name": "novel-writer-v3",
+  "version": "1.0.0",
+  "description": "Novel Writer V3 Desktop App",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "dist": "electron-builder"
+  },
+  "dependencies": {
+    "find-free-port": "^1.2.0"
+  },
+  "devDependencies": {
+    "electron": "^31.0.0",
+    "electron-builder": "^24.13.3"
+  },
+  "build": {
+    "appId": "com.ranroncaro.novelwriterv3",
+    "productName": "Novel Writer V3",
+    "directories": {
+      "output": "dist"
+    },
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "Novel Writer V3"
+    },
+    "extraResources": [
+      {
+        "from": "../backend_dist",
+        "to": "backend",
+        "filter": [
+          "**/*"
+        ]
+      },
+      {
+        "from": "../frontend/.next/standalone",
+        "to": "frontend",
+        "filter": [
+          "**/*"
+        ]
+      },
+      {
+        "from": "../frontend/public",
+        "to": "frontend/public",
+        "filter": [
+          "**/*"
+        ]
+      },
+      {
+        "from": "../frontend/.next/static",
+        "to": "frontend/.next/static",
+        "filter": [
+          "**/*"
+        ]
+      }
+    ]
+  }
+}
