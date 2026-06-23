@@ -7,7 +7,7 @@ Write-Host ""
 
 # Start Backend FastAPI Server
 Write-Host "[1/2] Starting Python FastAPI Backend on Port 8000..." -ForegroundColor Cyan
-Start-Process -FilePath "powershell.exe" -ArgumentList "-NoExit", "-Command", "cd backend; .venv\Scripts\activate; uvicorn app.main:app --reload --host 0.0.0.0 --port 8000"
+Start-Process -FilePath "powershell.exe" -ArgumentList "-NoExit", "-Command", "cd backend; .venv\Scripts\python.exe -m uvicorn app.main:app --reload --host 0.0.0.0 --port 8000"
 
 # Start Frontend Next.js Dev Server
 Write-Host "[2/2] Starting Next.js Dev Server on Port 3000..." -ForegroundColor Cyan
