@@ -78,8 +78,11 @@ def main():
                 
     if node_exe:
         dest_node = os.path.join(root_dir, "node.exe")
-        log(f"Copying node.exe to: {dest_node}")
-        shutil.copy(node_exe, dest_node)
+        if os.path.abspath(node_exe) != os.path.abspath(dest_node):
+            log(f"Copying node.exe to: {dest_node}")
+            shutil.copy(node_exe, dest_node)
+        else:
+            log("node.exe is already in the project root. Skipping copy.")
     else:
         log("Error: node.exe was not found. Cannot proceed with packaging a zero-dependency app.")
         sys.exit(1)

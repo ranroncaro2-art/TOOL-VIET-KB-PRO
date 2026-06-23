@@ -63,9 +63,12 @@ def main():
     else:
         # Copy to root folder next to launcher.py
         dest_node = os.path.join(root_dir, "node.exe")
-        log(f"Copying node.exe to project root: {dest_node}...")
-        shutil.copy(node_exe, dest_node)
-        log("Successfully copied node.exe.")
+        if os.path.abspath(node_exe) != os.path.abspath(dest_node):
+            log(f"Copying node.exe to project root: {dest_node}...")
+            shutil.copy(node_exe, dest_node)
+            log("Successfully copied node.exe.")
+        else:
+            log("node.exe is already in the project root. Skipping copy.")
 
     # 4. Trigger PyInstaller build
     pyinstaller_bin = os.path.join(root_dir, "backend", ".venv", "Scripts", "pyinstaller.exe")
