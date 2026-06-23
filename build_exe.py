@@ -64,7 +64,7 @@ def main():
         # Copy to root folder next to launcher.py
         dest_node = os.path.join(root_dir, "node.exe")
         log(f"Copying node.exe to project root: {dest_node}...")
-        shutil.copy2(node_exe, dest_node)
+        shutil.copy(node_exe, dest_node)
         log("Successfully copied node.exe.")
 
     # 4. Trigger PyInstaller build
