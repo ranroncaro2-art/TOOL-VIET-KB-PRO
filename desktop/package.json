@@ -45,6 +45,10 @@
     },
     "extraResources": [
       {
+        "from": "../node.exe",
+        "to": "bin/node.exe"
+      },
+      {
         "from": "../backend_dist",
         "to": "backend",
         "filter": [

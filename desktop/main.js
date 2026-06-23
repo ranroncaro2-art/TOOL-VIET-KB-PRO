@@ -72,17 +72,25 @@ function startServices() {
         process.chdir(appDir);
     }
 
+    const logDir = app.getPath('userData');
+    if (!fs.existsSync(logDir)) {
+        fs.mkdirSync(logDir, { recursive: true });
+    }
+    const backendLogFd = fs.openSync(path.join(logDir, 'backend.log'), 'a');
+    const frontendLogFd = fs.openSync(path.join(logDir, 'frontend.log'), 'a');
+
     console.log(`Working Directory: ${process.cwd()}`);
     console.log(`Backend Path: ${backendExe}`);
     console.log(`Frontend Path: ${serverJs}`);
     console.log(`Node Path: ${nodeBin}`);
+    console.log(`Logs Directory: ${logDir}`);
 
     // 1. Start Python FastAPI Backend
     if (fs.existsSync(backendExe)) {
         console.log("Starting backend process...");
         backendProcess = spawn(backendExe, [], {
             windowsHide: true,
-            stdio: 'ignore'
+            stdio: ['ignore', backendLogFd, backendLogFd]
         });
 
         backendProcess.on('error', (err) => {
@@ -97,13 +105,13 @@ function startServices() {
         console.log("Starting frontend process...");
         const env = { ...process.env };
         env.PORT = String(FRONTEND_PORT);
-        env.HOSTNAME = 'localhost';
+        env.HOSTNAME = '127.0.0.1';
         env.NODE_ENV = 'production';
 
         frontendProcess = spawn(nodeBin, [serverJs], {
             env: env,
             windowsHide: true,
-            stdio: 'ignore'
+            stdio: ['ignore', frontendLogFd, frontendLogFd]
         });
 
         frontendProcess.on('error', (err) => {
@@ -121,7 +129,8 @@ function createWindow() {
         title: "Novel Writer V3",
         webPreferences: {
             nodeIntegration: false,
-            contextIsolation: true
+            contextIsolation: true,
+            backgroundThrottling: false
         }
     });
 
@@ -131,9 +140,10 @@ function createWindow() {
     // Wait for the Next.js server to be active before loading
     waitForServer(FRONTEND_PORT, 15000, (ready) => {
         if (ready) {
-            mainWindow.loadURL(`http://localhost:${FRONTEND_PORT}`);
+            mainWindow.loadURL(`http://127.0.0.1:${FRONTEND_PORT}`);
         } else {
-            mainWindow.loadURL(`data:text/html,<html><body style="background:#1e1e2e;color:#f38ba8;font-family:sans-serif;text-align:center;padding-top:20%;"><h2>Failed to start servers. Please restart the app.</h2></body></html>`);
+            const fallbackHtml = `<html><body style="background:#1e1e2e;color:#f38ba8;font-family:sans-serif;text-align:center;padding-top:20%;"><h2>Failed to start servers. Please restart the app.</h2></body></html>`;
+            mainWindow.loadURL(`data:text/html,${encodeURIComponent(fallbackHtml)}`);
         }
     });
 

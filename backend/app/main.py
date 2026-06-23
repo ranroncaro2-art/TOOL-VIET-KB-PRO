@@ -696,9 +696,14 @@ async def story_auto_write_task(task_id: str, story_id: int, start_chap: int, en
             task["logs"].append(f"✓ CHAPTER {chap_no} GENERATED & MEMORY COMPILED SUCCESSFULLY!")
             
             # 5. Delay to avoid rate limiting and allow DB commit cooling
-            delay_seconds = int(models.SystemSetting.get_val(db, "free_mode_delay_seconds", "4"))
-            task["logs"].append(f"Cooling down for {delay_seconds} seconds before starting Chapter {chap_no + 1}...")
-            await asyncio.sleep(delay_seconds)
+            api_mode = models.SystemSetting.get_val(db, "api_mode", "free")
+            if api_mode == "free":
+                delay_seconds = int(models.SystemSetting.get_val(db, "free_mode_delay_seconds", "4"))
+                if delay_seconds > 0:
+                    task["logs"].append(f"Cooling down for {delay_seconds} seconds before starting Chapter {chap_no + 1}...")
+                    await asyncio.sleep(delay_seconds)
+            else:
+                task["logs"].append(f"Paid API mode: Skipping cooling period before starting Chapter {chap_no + 1}...")
             
         task["status"] = "completed"
         task["logs"].append("🎉 ALL CHAPTERS AUTO-WRITTEN AND MEMORIES COMPILED SUCCESSFULLY!")

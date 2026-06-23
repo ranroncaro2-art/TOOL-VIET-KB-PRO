@@ -216,7 +216,7 @@ class NovelWriterLauncher:
         # Setup environment variables for Next.js standalone
         env = os.environ.copy()
         env["PORT"] = str(FRONTEND_PORT)
-        env["HOSTNAME"] = "localhost"
+        env["HOSTNAME"] = "127.0.0.1"
         env["NODE_ENV"] = "production"
 
         try:
@@ -279,7 +279,7 @@ class NovelWriterLauncher:
                 return False
 
     def open_browser(self):
-        url = f"http://localhost:{FRONTEND_PORT}"
+        url = f"http://127.0.0.1:{FRONTEND_PORT}"
         gui_print(f"Mở trình duyệt truy cập: {url}")
         webbrowser.open(url)
 
