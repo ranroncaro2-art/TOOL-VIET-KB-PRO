@@ -10,14 +10,14 @@ Write-Host "[1/2] Starting Python FastAPI Backend on Port 8000..." -ForegroundCo
 Start-Process -FilePath "cmd.exe" -WorkingDirectory $PSScriptRoot -ArgumentList "/k", "cd backend && .venv\Scripts\python.exe -m uvicorn app.main:app --reload --host 0.0.0.0 --port 8000"
 
 # Start Frontend Next.js Dev Server
-Write-Host "[2/2] Starting Next.js Dev Server on Port 3000..." -ForegroundColor Cyan
-Start-Process -FilePath "cmd.exe" -WorkingDirectory $PSScriptRoot -ArgumentList "/k", "cd frontend && npm run dev"
+Write-Host "[2/2] Starting Next.js Dev Server on Port 3001..." -ForegroundColor Cyan
+Start-Process -FilePath "cmd.exe" -WorkingDirectory $PSScriptRoot -ArgumentList "/k", "cd frontend && npm run dev -- -p 3001"
 
 Write-Host ""
 Write-Host "==================================================" -ForegroundColor Green
 Write-Host "  Launch Sequence Complete! Services are booting:" -ForegroundColor Green
 Write-Host "  -> Backend API Portal: http://localhost:8000" -ForegroundColor Green
 Write-Host "  -> Backend Swagger API docs: http://localhost:8000/docs" -ForegroundColor Green
-Write-Host "  -> Frontend workspace UI: http://localhost:3000" -ForegroundColor Green
+Write-Host "  -> Frontend workspace UI: http://localhost:3001" -ForegroundColor Green
 Write-Host "==================================================" -ForegroundColor Green
 Write-Host "Keep the spawned window terminals open to maintain servers." -ForegroundColor Yellow
